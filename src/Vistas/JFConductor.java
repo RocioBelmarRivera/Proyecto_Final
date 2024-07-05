@@ -4,15 +4,163 @@
  */
 package Vistas;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import modelos.CModelosConductor;
+import utilitarios.CUtilitarios;
+
 /**
  *
  * @author rocio
  */
 public class JFConductor extends javax.swing.JFrame {
+//PERMITE LLAMAR LAS CONSULTAS DE LOS MODELOS
 
-    /**
-     * Creates new form JFConductor
-     */
+    CModelosConductor modelos = new CModelosConductor();
+    ArrayList<String[]> resultados = new ArrayList<>();
+    int numero;
+
+    //***************METODOS PROPIOS**********
+    private void limpiar_campos() {
+        jTFNombre.setText("");
+        jTFApellidoP.setText("");
+        jTFApellidoM.setText("");
+    }
+
+    private boolean campos_vacios() {
+        return jTFNombre.getText().isEmpty()
+                || jTFApellidoP.getText().isEmpty()
+                || jTFApellidoM.getText().isEmpty();
+
+    }
+
+    private void limpiar_tabla() {
+        DefaultTableModel modelTabla
+                = (DefaultTableModel) jTDatos.getModel();
+        for (int i = (modelTabla.getRowCount() - 1); i >= 0; i--) {
+            modelTabla.removeRow(i);
+        }
+    }
+
+    private void lee_datos() {
+        numero = 1;
+        //2.- obtener modelo de la tabla de datos
+        DefaultTableModel modelTabla
+                = (DefaultTableModel) jTDatos.getModel();
+        try {
+            //3. leer los dtos
+            resultados = modelos.busca_objetos_model();
+            limpiar_tabla();
+            //asignar dtos a la tabla
+            for (String[] resultado : resultados) {
+                //añadir datos al modelo de la tabla
+                modelTabla.addRow(new Object[]{
+                    resultado[0],
+                    resultado[1],
+                    resultado[2],
+                    resultado[3]});
+            }
+
+        } catch (SQLException e) {
+        }
+    }
+
+    private void inserta_dato() {
+        if (campos_vacios()) {
+            CUtilitarios.msg_adver("hay datos vacios", "INSERTA DATO");
+        } else {
+            //1. OBTENER LOS DATOS DE LOS CUADROS DE TEXTO
+            String nombre = jTFNombre.getText();
+            String apellidop = jTFApellidoP.getText();
+            String apellidom = jTFApellidoM.getText();
+            //2. insertar datos
+            try {
+                if (modelos.inserta_objeto_model(nombre, apellidop, apellidom)) {
+                    // CUtilitarios.msg("Insercion correcta", "inserta datos");
+
+                } else {
+                    CUtilitarios.msg_adver("Insercion no procesada", "inserta dato");
+                }
+                limpiar_campos();
+                lee_datos();
+            } catch (Exception e) {
+            }
+
+        }
+    }
+
+    private void elimina_dato() {
+        int idEliminar;
+        //obtener el modelo de la tabla
+        DefaultTableModel modelTabla
+                = (DefaultTableModel) jTDatos.getModel();
+        //si la cantidaxd de filas es direfente de 0
+        if (modelTabla.getRowCount() != 0) {//TABLA CON FILAS
+            if (jTDatos.getSelectedRow() != -1) {
+                idEliminar = Integer.parseInt((String) modelTabla.getValueAt(jTDatos.getSelectedRow(), 0));
+                System.out.println(" " + idEliminar);//prueba
+                try {
+                    if (modelos.elimina_objeto_model(idEliminar)) {
+                        CUtilitarios.msg("Eliminacion correcta", "Elimina datos");
+                    }
+                    lee_datos();
+                } catch (Exception e) {
+                }
+            } else {
+            }
+        } else {//SI LA TABLA NO TIENE FILAS
+            CUtilitarios.msg_adver("TABLA VACIA", "ELIMINA DATO");
+        }
+        limpiar_campos();
+    }
+
+    private int lee_fila_seleccionada() {
+        int id=-1;
+        DefaultTableModel modelTabla
+                = (DefaultTableModel) jTDatos.getModel();
+        if (modelTabla.getRowCount() != 0) {//TABLA CON FILAS
+            if (jTDatos.getSelectedRow() != -1) {
+                id = Integer.parseInt((String) modelTabla.getValueAt(jTDatos.getSelectedRow(), 0));
+                // System.out.println(" " + idEliminar);//prueba
+                jTFNombre.setText((String) modelTabla.getValueAt(jTDatos.getSelectedRow(), 1));
+                jTFApellidoP.setText((String) modelTabla.getValueAt(jTDatos.getSelectedRow(), 2));
+                jTFApellidoM.setText((String) modelTabla.getValueAt(jTDatos.getSelectedRow(), 3));
+                /* try {
+                    if (modelos.elimina_objeto_model(idEliminar)) {
+                        CUtilitarios.msg("Eliminacion correcta", "Elimina datos");
+                    }
+                    lee_datos();
+                } catch (Exception e) {
+                }*/
+            } else {
+            }
+        } else {//SI LA TABLA NO TIENE FILAS
+            CUtilitarios.msg_adver("TABLA VACIA", "ELIMINA DATO");
+        }
+        return id;
+    }
+
+    private void actualiza_dato() {
+        int id;
+         DefaultTableModel modelTabla
+                = (DefaultTableModel) jTDatos.getModel();
+        if (campos_vacios()) {
+            CUtilitarios.msg_adver("Datos vacios", "Actualiza datos");
+        } else {
+            try {
+                 id = Integer.parseInt((String) modelTabla.getValueAt(jTDatos.getSelectedRow(), 0));
+                String marca=jTFNombre.getText();
+                String modelo=jTFApellidoP.getText();
+                String color=jTFApellidoM.getText();
+                modelos.actualiza_objeto_model(id, marca, modelo, color);
+                lee_datos();
+            } catch (Exception e) {
+            }
+        }
+        limpiar_campos();
+    }
+    
     public JFConductor() {
         initComponents();
     }
@@ -41,7 +189,7 @@ public class JFConductor extends javax.swing.JFrame {
         jBLimpiarTabla = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTDatos = new javax.swing.JTable();
         jBSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -80,8 +228,8 @@ public class JFConductor extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 204, 204));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Conductor"));
 
-        jTable1.setBackground(new java.awt.Color(204, 204, 255));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTDatos.setBackground(new java.awt.Color(204, 204, 255));
+        jTDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null}
@@ -90,7 +238,7 @@ public class JFConductor extends javax.swing.JFrame {
                 "Id", "Nombre", "Apellido Paterno", "Apellido Materno"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTDatos);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -280,9 +428,9 @@ public class JFConductor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTDatos;
     private javax.swing.JTextField jTFApellidoM;
     private javax.swing.JTextField jTFApellidoP;
     private javax.swing.JTextField jTFNombre;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
