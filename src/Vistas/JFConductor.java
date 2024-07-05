@@ -211,6 +211,11 @@ public class JFConductor extends javax.swing.JFrame {
         });
 
         jBEliminar.setText("Eliminar");
+        jBEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBEliminarActionPerformed(evt);
+            }
+        });
 
         jBActualizar.setText("Actualizar");
         jBActualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -220,10 +225,25 @@ public class JFConductor extends javax.swing.JFrame {
         });
 
         jBAgregar.setText("Agregar");
+        jBAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBAgregarActionPerformed(evt);
+            }
+        });
 
         jBConsultar.setText("Consultar");
+        jBConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBConsultarActionPerformed(evt);
+            }
+        });
 
         jBLimpiarTabla.setText("Limpiar Tabla");
+        jBLimpiarTabla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBLimpiarTablaActionPerformed(evt);
+            }
+        });
 
         jPanel3.setBackground(new java.awt.Color(255, 204, 204));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Conductor"));
@@ -238,6 +258,11 @@ public class JFConductor extends javax.swing.JFrame {
                 "Id", "Nombre", "Apellido Paterno", "Apellido Materno"
             }
         ));
+        jTDatos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTDatosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTDatos);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -365,6 +390,7 @@ public class JFConductor extends javax.swing.JFrame {
 
     private void jBActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBActualizarActionPerformed
         // TODO add your handling code here:
+        actualiza_dato();
     }//GEN-LAST:event_jBActualizarActionPerformed
 
     private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
@@ -378,6 +404,31 @@ public class JFConductor extends javax.swing.JFrame {
         cliente.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_jBSalirMouseClicked
+
+    private void jBConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBConsultarActionPerformed
+        // TODO add your handling code here:
+        lee_datos();
+    }//GEN-LAST:event_jBConsultarActionPerformed
+
+    private void jBLimpiarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBLimpiarTablaActionPerformed
+        // TODO add your handling code here:
+        limpiar_tabla();
+    }//GEN-LAST:event_jBLimpiarTablaActionPerformed
+
+    private void jBEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliminarActionPerformed
+        // TODO add your handling code here:
+        elimina_dato();
+    }//GEN-LAST:event_jBEliminarActionPerformed
+
+    private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
+        // TODO add your handling code here:
+        inserta_dato();
+    }//GEN-LAST:event_jBAgregarActionPerformed
+
+    private void jTDatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTDatosMouseClicked
+        // TODO add your handling code here:
+        lee_fila_seleccionada();
+    }//GEN-LAST:event_jTDatosMouseClicked
 
     /**
      * @param args the command line arguments

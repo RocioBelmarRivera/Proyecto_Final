@@ -4,19 +4,28 @@
  */
 package Vistas;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+
 /**
  *
  * @author rocio
  */
 public class JFVistaPrincipal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form JFVistaPrincipal
-     */
+    
     public JFVistaPrincipal() {
+          
         initComponents();
+        
+     
+     this.setLocationRelativeTo(null);
     }
 
+  
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
