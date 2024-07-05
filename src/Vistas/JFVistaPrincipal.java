@@ -42,6 +42,11 @@ public class JFVistaPrincipal extends javax.swing.JFrame {
         jLabel1.setText("GRUPO FLECHA AMARILLA");
 
         jBConductor.setText("CONDUCTOR");
+        jBConductor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jBConductorMouseClicked(evt);
+            }
+        });
         jBConductor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBConductorActionPerformed(evt);
@@ -121,6 +126,14 @@ public class JFVistaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         
     }//GEN-LAST:event_jBConductorActionPerformed
+
+    private void jBConductorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBConductorMouseClicked
+     // TODO add your handling code here:
+       JFConductor cliente = new JFConductor();
+        cliente.setVisible(true);
+        cliente.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_jBConductorMouseClicked
 
     /**
      * @param args the command line arguments
